@@ -8,8 +8,17 @@ import {
   Text,
   BlockStack,
 } from "@shopify/polaris";
+import { useNavigate } from "react-router";
 
 export default function Settings() {
+  const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!isRegistered) {
+  //     navigate("/app");
+  //   }
+  // }, []);
+
   return (
     <Page narrowWidth>
       <ui-title-bar title="Settings" />

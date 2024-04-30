@@ -1,5 +1,3 @@
-import { useState } from "react";
-import type { LoaderFunctionArgs } from "@remix-run/node";
 import {
   Page,
   Layout,
@@ -8,31 +6,20 @@ import {
   BlockStack,
   Banner,
 } from "@shopify/polaris";
-import { authenticate } from "../shopify.server";
-import { useUser } from "~/contexts/UserProvider";
-
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
-
-  return null;
-};
+import { useOutletContext } from "react-router";
+import type { Context } from "~/types";
 
 export default function Index() {
-  const { general, handleRegister } = useUser();
-  const [isLoading, setIsLoading] = useState(false);
+  const { isRegistered, handleRegister, isRegisterLoading } =
+    useOutletContext<Context>();
 
-  const onRegister = () => {
-    setIsLoading(true);
-    handleRegister(() => setIsLoading(false));
-  };
-
-  const pageTitle = general.isRegistered ? "EZ Alerts" : "Register";
+  const pageTitle = isRegistered ? "EZ Alerts" : "Register";
 
   return (
     <Page narrowWidth>
       <ui-title-bar title={pageTitle}></ui-title-bar>
       <BlockStack gap="500">
-        {!general.isRegistered && (
+        {!isRegistered && (
           <Banner tone="success" title="Welcome!">
             <BlockStack gap="200" inlineAlign="start">
               <p>
@@ -41,15 +28,15 @@ export default function Index() {
               </p>
               <Button
                 variant="primary"
-                loading={isLoading}
-                onClick={onRegister}
+                loading={isRegisterLoading}
+                onClick={handleRegister}
               >
                 Register
               </Button>
             </BlockStack>
           </Banner>
         )}
-        {general.isRegistered && (
+        {isRegistered && (
           <Layout>
             <Layout.Section>
               <Card>asd</Card>
