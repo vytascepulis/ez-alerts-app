@@ -1,16 +1,16 @@
 import { Link } from "@remix-run/react";
 
 interface Props {
-  isRegistered: boolean;
+  showFullNav: boolean;
 }
 
-const Navigation = ({ isRegistered }: Props) => {
+const Navigation = ({ showFullNav }: Props) => {
   return (
     <ui-nav-menu>
       <Link to="/app" rel="home">
         Home
       </Link>
-      {isRegistered && <Link to="/app/settings">Settings</Link>}
+      {showFullNav && <Link to="/app/settings">Settings</Link>}
     </ui-nav-menu>
   );
 };

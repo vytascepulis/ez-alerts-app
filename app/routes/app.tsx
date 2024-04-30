@@ -5,10 +5,11 @@ import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { authenticate } from "~/shopify.server";
-import Navigation from "~/Components/Navigation";
+import Navigation from "~/components/Navigation";
 import useMutation from "~/hooks/useMutation";
 import useMergeState from "~/hooks/useMergeState";
-import type { Context } from "~/types";
+import type { Context, UserData } from "~/types";
+import { useOutletContext } from "react-router";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -27,8 +28,9 @@ interface RegisterState {
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
+  const userData = useOutletContext<UserData>();
   const [registerState, setRegisterState] = useMergeState<RegisterState>({
-    isRegistered: false,
+    isRegistered: Boolean(userData),
     isRegisterFailed: false,
   });
 
@@ -51,7 +53,6 @@ export default function App() {
   });
 
   const handleRegister = () => {
-    console.log("register:", shopify.config.shop);
     mutate({
       shopDomain: shopify.config.shop,
     });
@@ -62,11 +63,14 @@ export default function App() {
     isRegisterLoading: isLoading,
     isRegisterFailed: registerState.isRegisterFailed,
     isRegistered: registerState.isRegistered,
+    uuid: userData?.uuid,
+    isBlocked: Boolean(userData?.isBlocked),
+    settings: userData?.settings,
   };
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
-      <Navigation isRegistered={registerState.isRegistered} />
+      <Navigation showFullNav={context.isRegistered && !context.isBlocked} />
       <Outlet context={context} />
     </AppProvider>
   );
