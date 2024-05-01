@@ -10,7 +10,6 @@ import useMutation from "~/hooks/useMutation";
 import useMergeState from "~/hooks/useMergeState";
 import type { Context, UserData } from "~/types";
 import { useOutletContext } from "react-router";
-import { useState } from "react";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -40,7 +39,7 @@ export default function App() {
     isRegisterFailed: false,
   });
 
-  const [userData, setUserData] = useState(data.userData);
+  const [userData, setUserData] = useMergeState(data.userData);
 
   const onRegisterError = (err: string) => {
     shopify.toast.show(`Registration failed: ${err}`, { isError: true });
@@ -72,6 +71,7 @@ export default function App() {
 
   const context: Context = {
     handleRegister,
+    setUserData,
     isRegisterLoading: isLoading,
     isRegisterFailed: registerState.isRegisterFailed,
     isRegistered: registerState.isRegistered,

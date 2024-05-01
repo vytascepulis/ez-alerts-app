@@ -1,4 +1,4 @@
-interface Settings {
+export interface Settings {
   text: {
     content: string;
     specialColor: string;
@@ -28,6 +28,7 @@ export interface UserData {
 
 export interface Context extends UserData {
   handleRegister: () => void;
+  setUserData: (userData: UserData) => void;
   isRegisterLoading: boolean;
   isRegisterFailed: boolean;
   isRegistered: boolean;

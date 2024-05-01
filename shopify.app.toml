@@ -3,7 +3,7 @@
 client_id = "61ebded71f5ddc12c4fa05c0ad2c105c"
 name = "EZ Alerts"
 handle = "ez-alerts"
-application_url = "https://shall-shame-comic-sarah.trycloudflare.com"
+application_url = "https://cheapest-bond-pdas-antivirus.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://shall-shame-comic-sarah.trycloudflare.com/auth/callback",
-  "https://shall-shame-comic-sarah.trycloudflare.com/auth/shopify/callback",
-  "https://shall-shame-comic-sarah.trycloudflare.com/api/auth/callback"
+  "https://cheapest-bond-pdas-antivirus.trycloudflare.com/auth/callback",
+  "https://cheapest-bond-pdas-antivirus.trycloudflare.com/auth/shopify/callback",
+  "https://cheapest-bond-pdas-antivirus.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

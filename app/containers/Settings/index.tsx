@@ -14,11 +14,13 @@ import { animationsIn, animationsOut } from "~/containers/Main/constants";
 import ColorPicker from "~/components/ColorPicker";
 import Buttons from "~/containers/Settings/Buttons";
 import FileUpload from "~/containers/Settings/FileUpload";
+import type { State } from "~/containers/Settings/types";
+import SaveBar from "~/containers/Settings/SaveBar";
 
 const Settings = () => {
   const { settings, uuid, ENV } = useOutletContext<Context>();
 
-  const [state, setState] = useMergeState({
+  const [state, setState] = useMergeState<State>({
     duration: settings?.display.duration || 0,
     animationIn: settings?.display.animationIn,
     animationOut: settings?.display.animationOut,
@@ -45,6 +47,7 @@ const Settings = () => {
 
   return (
     <Card>
+      <SaveBar state={state} setState={setState} />
       <BlockStack gap="600">
         <Buttons browserSrc={browserSrc} />
         <BlockStack gap="400">
