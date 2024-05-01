@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   Divider,
-  DropZone,
   RangeSlider,
   Select,
   TextField,
@@ -14,6 +13,7 @@ import type { Context } from "~/types";
 import { animationsIn, animationsOut } from "~/containers/Main/constants";
 import ColorPicker from "~/components/ColorPicker";
 import Buttons from "~/containers/Settings/Buttons";
+import FileUpload from "~/containers/Settings/FileUpload";
 
 const Settings = () => {
   const { settings, uuid, ENV } = useOutletContext<Context>();
@@ -24,6 +24,11 @@ const Settings = () => {
     animationOut: settings?.display.animationOut,
     message: settings?.text.content,
     specialColor: settings?.text.specialColor,
+    imageFileName: settings?.image.fileName,
+    audioFileName: settings?.audio.fileName,
+    imageBase64: settings?.image.base64,
+    audioBase64: settings?.audio.base64,
+    volume: settings?.audio.volume,
   });
 
   const browserSrc = `${ENV.EZALERTS_CLIENT_URL}#${uuid}`;
@@ -34,14 +39,8 @@ const Settings = () => {
     });
   };
 
-  const onDurationChange = (value: number) => {
-    setState({ duration: value * 1000 });
-  };
-
-  const onColorChange = (color: string) => {
-    setState({
-      specialColor: color,
-    });
+  const onFieldChange = (field: string, value: string | number) => {
+    setState({ [field]: value });
   };
 
   return (
@@ -56,11 +55,9 @@ const Settings = () => {
             value={browserSrc}
             type={"password"}
             suffix={
-              <>
-                <Button variant="plain" onClick={onCopySrc}>
-                  Copy
-                </Button>
-              </>
+              <Button variant="plain" onClick={onCopySrc}>
+                Copy
+              </Button>
             }
           />
           <Divider borderColor="border" />
@@ -68,39 +65,49 @@ const Settings = () => {
             label="Message template"
             autoComplete="off"
             value={state.message}
-            onChange={(value) => setState({ message: value })}
+            onChange={(value) => onFieldChange("message", value)}
             multiline
           />
           <ColorPicker
-            onChange={onColorChange}
+            onChange={(color) => onFieldChange("specialColor", color)}
             initialColor={state.specialColor || ""}
           />
           <Select
             label="Animation in"
             options={animationsIn}
-            onChange={(value) => setState({ animationIn: value })}
+            onChange={(value) => onFieldChange("animationIn", value)}
             value={state.animationIn}
           />
           <Select
             label="Animation out"
             options={animationsOut}
-            onChange={(value) => setState({ animationOut: value })}
+            onChange={(value) => onFieldChange("animationOut", value)}
             value={state.animationOut}
           />
           <RangeSlider
             output
             label="Alert duration (seconds)"
             min={1}
-            max={30}
+            max={15}
             value={state.duration / 1000}
-            onChange={onDurationChange}
+            onChange={(value) =>
+              onFieldChange("duration", (value as number) * 1000)
+            }
           />
           <Divider borderColor="border" />
-          <div style={{ width: 30, height: 30 }}>
-            <DropZone allowMultiple={false}>
-              <DropZone.FileUpload />
-            </DropZone>
-          </div>
+          <FileUpload
+            audioFileName={state.audioFileName}
+            imageFileName={state.imageFileName}
+            onChange={onFieldChange}
+          />
+          <RangeSlider
+            output
+            label="Volume"
+            min={1}
+            max={100}
+            value={state.volume || 0}
+            onChange={(value) => onFieldChange("volume", value as number)}
+          />
         </BlockStack>
       </BlockStack>
     </Card>
