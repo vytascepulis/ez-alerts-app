@@ -4,7 +4,6 @@ import {
   Card,
   Divider,
   DropZone,
-  InlineStack,
   RangeSlider,
   Select,
   TextField,
@@ -14,18 +13,10 @@ import { useOutletContext } from "react-router";
 import type { Context } from "~/types";
 import { animationsIn, animationsOut } from "~/containers/Main/constants";
 import ColorPicker from "~/components/ColorPicker";
-import useMutation from "~/hooks/useMutation";
+import Buttons from "~/containers/Settings/Buttons";
 
 const Settings = () => {
   const { settings, uuid, ENV } = useOutletContext<Context>();
-
-  const { mutate: fireTestAlert, isLoading: isAlertLoading } = useMutation({
-    key: "firealert-mutation",
-    endpoint: `${ENV.EZALERTS_SERVER_URL}/test-alert/${uuid}`,
-    method: "POST",
-    onError: (err) => shopify.toast.show(err.message, { isError: true }),
-    onSuccess: () => shopify.toast.show("Test alert fired successfully!"),
-  });
 
   const [state, setState] = useMergeState({
     duration: settings?.display.duration || 0,
@@ -56,11 +47,7 @@ const Settings = () => {
   return (
     <Card>
       <BlockStack gap="600">
-        <InlineStack>
-          <Button loading={isAlertLoading} onClick={() => fireTestAlert()}>
-            Test alert
-          </Button>
-        </InlineStack>
+        <Buttons browserSrc={browserSrc} />
         <BlockStack gap="400">
           <TextField
             label="Browser source"
@@ -76,7 +63,7 @@ const Settings = () => {
               </>
             }
           />
-          <Divider />
+          <Divider borderColor="border" />
           <TextField
             label="Message template"
             autoComplete="off"
@@ -108,8 +95,8 @@ const Settings = () => {
             value={state.duration / 1000}
             onChange={onDurationChange}
           />
-          <Divider />
-          <div style={{ width: 60, height: 60 }}>
+          <Divider borderColor="border" />
+          <div style={{ width: 30, height: 30 }}>
             <DropZone allowMultiple={false}>
               <DropZone.FileUpload />
             </DropZone>

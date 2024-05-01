@@ -1,6 +1,6 @@
 import { Layout } from "@shopify/polaris";
 import Sidebar from "~/containers/Main/Sidebar";
-import Settings from "~/containers/Main/Settings";
+import Settings from "~/containers/Settings";
 
 const Main = () => {
   return (
