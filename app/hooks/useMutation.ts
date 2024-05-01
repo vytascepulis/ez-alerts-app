@@ -38,16 +38,22 @@ const mutationFunction = async <T>(allVariables: AllVariables<T>) => {
 
 const useMutation = <T>(hookVariables: HookVariables<T>) => {
   const mutation = useM({
-    mutationFn: (mutationVariables: MutationVariables) =>
-      mutationFunction({ ...hookVariables, variables: mutationVariables }),
+    mutationFn: (mutationVariables?: MutationVariables | undefined) =>
+      mutationFunction({
+        ...hookVariables,
+        variables: mutationVariables || {},
+      }),
     onError: (err) =>
       hookVariables?.onError ? hookVariables?.onError(err) : undefined,
     onSuccess: (data) =>
       hookVariables?.onSuccess ? hookVariables?.onSuccess(data) : undefined,
   });
 
+  const updatedMutate = (variables: MutationVariables = {}) =>
+    mutation.mutate(variables);
+
   return {
-    mutate: mutation.mutate,
+    mutate: updatedMutate,
     isLoading: mutation.isPending,
     error: mutation.error?.message,
   };

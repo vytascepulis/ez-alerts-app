@@ -14,12 +14,20 @@ import { useOutletContext } from "react-router";
 import type { Context } from "~/types";
 import { animationsIn, animationsOut } from "~/containers/Main/constants";
 import ColorPicker from "~/components/ColorPicker";
+import useMutation from "~/hooks/useMutation";
 
 const Settings = () => {
   const { settings, uuid, ENV } = useOutletContext<Context>();
 
+  const { mutate: fireTestAlert, isLoading: isAlertLoading } = useMutation({
+    key: "firealert-mutation",
+    endpoint: `${ENV.EZALERTS_SERVER_URL}/test-alert/${uuid}`,
+    method: "POST",
+    onError: (err) => shopify.toast.show(err.message, { isError: true }),
+    onSuccess: () => shopify.toast.show("Test alert fired successfully!"),
+  });
+
   const [state, setState] = useMergeState({
-    isSrcShown: false,
     duration: settings?.display.duration || 0,
     animationIn: settings?.display.animationIn,
     animationOut: settings?.display.animationOut,
@@ -33,10 +41,6 @@ const Settings = () => {
     navigator.clipboard.writeText(browserSrc ?? "").then(() => {
       shopify.toast.show("Browser source copied!");
     });
-  };
-
-  const handleTestAlert = () => {
-    console.log("test", state.specialColor);
   };
 
   const onDurationChange = (value: number) => {
@@ -53,7 +57,9 @@ const Settings = () => {
     <Card>
       <BlockStack gap="600">
         <InlineStack>
-          <Button onClick={handleTestAlert}>Test alert</Button>
+          <Button loading={isAlertLoading} onClick={() => fireTestAlert()}>
+            Test alert
+          </Button>
         </InlineStack>
         <BlockStack gap="400">
           <TextField
