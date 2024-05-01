@@ -9,7 +9,7 @@ interface QueryVariables<T> {
 }
 
 const queryFunction = async <T>(variables: QueryVariables<T>) => {
-  const data = await fetch(`http://localhost:3000/${variables.endpoint}`, {
+  const data = await fetch(variables.endpoint, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

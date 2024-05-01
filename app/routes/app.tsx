@@ -10,6 +10,7 @@ import useMutation from "~/hooks/useMutation";
 import useMergeState from "~/hooks/useMergeState";
 import type { Context, UserData } from "~/types";
 import { useOutletContext } from "react-router";
+import { useState } from "react";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -28,28 +29,39 @@ interface RegisterState {
 
 export default function App() {
   const { apiKey } = useLoaderData<typeof loader>();
-  const userData = useOutletContext<UserData>();
+  const data = useOutletContext<{
+    userData: UserData;
+    ENV: { [key: string]: string };
+  }>();
+  const { ENV } = data;
+
   const [registerState, setRegisterState] = useMergeState<RegisterState>({
-    isRegistered: Boolean(userData),
+    isRegistered: Boolean(data.userData),
     isRegisterFailed: false,
   });
 
+  const [userData, setUserData] = useState(data.userData);
+
   const onRegisterError = (err: string) => {
-    shopify.toast.show(`Registration failed: ${err}`);
+    shopify.toast.show(`Registration failed: ${err}`, { isError: true });
     setRegisterState({ isRegisterFailed: true });
   };
 
-  const onRegisterSuccess = () => {
+  const onRegisterSuccess = (data: UserData) => {
     shopify.toast.show("Registered successfully!");
+    setUserData(data);
     setRegisterState({ isRegistered: true });
   };
 
-  const { mutate, isLoading } = useMutation<{ message: string }>({
+  const { mutate, isLoading } = useMutation<{
+    message: string;
+    data: UserData;
+  }>({
     key: "register-mutation",
-    endpoint: "register",
+    endpoint: `${ENV.EZALERTS_SERVER_URL}/register`,
     method: "POST",
     onError: (err) => onRegisterError(err.message),
-    onSuccess: onRegisterSuccess,
+    onSuccess: ({ data }) => onRegisterSuccess(data),
   });
 
   const handleRegister = () => {
@@ -66,11 +78,12 @@ export default function App() {
     uuid: userData?.uuid,
     isBlocked: Boolean(userData?.isBlocked),
     settings: userData?.settings,
+    ENV: ENV,
   };
 
   return (
     <AppProvider isEmbeddedApp apiKey={apiKey}>
-      <Navigation showFullNav={context.isRegistered && !context.isBlocked} />
+      <Navigation />
       <Outlet context={context} />
     </AppProvider>
   );

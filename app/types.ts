@@ -1,23 +1,23 @@
 interface Settings {
-  settings: {
-    text: {
-      content: string;
-      specialColor: string;
-    };
-    display: {
-      duration: number;
-      animationIn: string;
-      animationOut: string;
-    };
-    audio: {
-      volume: number;
-      base64: string;
-    };
-    image: {
-      base64: string;
-    };
-    useProductImages: boolean;
+  text: {
+    content: string;
+    specialColor: string;
   };
+  display: {
+    duration: number;
+    animationIn: string;
+    animationOut: string;
+  };
+  audio: {
+    volume: number;
+    base64: string;
+    fileName: string;
+  };
+  image: {
+    base64: string;
+    fileName: string;
+  };
+  useProductImages: boolean;
 }
 
 export interface UserData {
@@ -31,4 +31,5 @@ export interface Context extends UserData {
   isRegisterLoading: boolean;
   isRegisterFailed: boolean;
   isRegistered: boolean;
+  ENV: { [key: string]: string };
 }

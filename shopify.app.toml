@@ -3,7 +3,7 @@
 client_id = "61ebded71f5ddc12c4fa05c0ad2c105c"
 name = "EZ Alerts"
 handle = "ez-alerts"
-application_url = "https://vulnerable-offers-warner-in.trycloudflare.com"
+application_url = "https://occupational-affiliation-destination-unfortunately.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "write_products"
 
 [auth]
 redirect_urls = [
-  "https://vulnerable-offers-warner-in.trycloudflare.com/auth/callback",
-  "https://vulnerable-offers-warner-in.trycloudflare.com/auth/shopify/callback",
-  "https://vulnerable-offers-warner-in.trycloudflare.com/api/auth/callback"
+  "https://occupational-affiliation-destination-unfortunately.trycloudflare.com/auth/callback",
+  "https://occupational-affiliation-destination-unfortunately.trycloudflare.com/auth/shopify/callback",
+  "https://occupational-affiliation-destination-unfortunately.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

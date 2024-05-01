@@ -16,7 +16,7 @@ interface HookVariables<T> {
 type AllVariables<T> = { variables: MutationVariables } & HookVariables<T>;
 
 const mutationFunction = async <T>(allVariables: AllVariables<T>) => {
-  const data = await fetch(`http://localhost:3000/${allVariables.endpoint}`, {
+  const data = await fetch(allVariables.endpoint, {
     method: allVariables.method,
     headers: {
       "Content-Type": "application/json",

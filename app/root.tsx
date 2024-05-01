@@ -17,13 +17,16 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { pathname, href } = new URL(request.url);
   let userData;
 
-  const data = await fetch(`http://localhost:3000/settings-full/${shop}`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
+  const data = await fetch(
+    `${process.env.EZALERTS_SERVER_URL}/settings-full/${shop}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     },
-  });
+  );
 
   if (!data.ok) {
     userData = null;
@@ -39,6 +42,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   } else {
     return json({
       userData,
+      ENV: {
+        EZALERTS_CLIENT_URL: process.env.EZALERTS_CLIENT_URL,
+        EZALERTS_SERVER_URL: process.env.EZALERTS_SERVER_URL,
+      },
     });
   }
 };
@@ -52,7 +59,12 @@ const queryClient = new QueryClient({
 });
 
 export default function App() {
-  const { userData } = useLoaderData<typeof loader>();
+  const { userData, ENV } = useLoaderData<typeof loader>();
+
+  const context = {
+    userData,
+    ENV,
+  };
 
   return (
     <html>
@@ -70,7 +82,7 @@ export default function App() {
       </head>
       <body>
         <QueryClientProvider client={queryClient}>
-          <Outlet context={userData} />
+          <Outlet context={context} />
           <ScrollRestoration />
           <Scripts />
         </QueryClientProvider>

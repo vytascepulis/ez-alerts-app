@@ -1,10 +1,15 @@
-import { Card, Layout } from "@shopify/polaris";
+import { Layout } from "@shopify/polaris";
+import Sidebar from "~/containers/Main/Sidebar";
+import Settings from "~/containers/Main/Settings";
 
 const Main = () => {
   return (
     <Layout>
       <Layout.Section>
-        <Card>asd</Card>
+        <Settings />
+      </Layout.Section>
+      <Layout.Section variant="oneThird">
+        <Sidebar />
       </Layout.Section>
     </Layout>
   );
